@@ -7,6 +7,7 @@ const app = express();
 
 // Routes
 const ingredientsRoutes = require("./routes/ingredients");
+const recipesRoutes = require("./routes/recipes");
 
 // Middlewares
 app.use(cors());
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Use routes
 app.use("/ingredients", ingredientsRoutes);
+app.use("/recipes", recipesRoutes);
 
 // Test route
 app.get("/", (req, res) => {
