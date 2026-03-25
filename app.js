@@ -11,17 +11,21 @@ const recipesRoutes = require("./routes/recipes");
 const shoppingListRoutes = require("./routes/shoppingList");
 const favoritesRoutes = require("./routes/favorites");
 const viewedRoutes = require("./routes/viewed");
+const preferencesRoutes = require("./routes/preferences");
 
 // Middlewares
+const preferencesController = require("./controllers/preferencesController");
+
 app.use(cors());
 app.use(express.json());
 
 // Use routes
-app.use("/ingredients", ingredientsRoutes);
+app.use("/ingredients", preferencesController.checkStockLogic, ingredientsRoutes);
 app.use("/recipes", recipesRoutes);
 app.use("/shopping-list", shoppingListRoutes);
 app.use("/favorites", favoritesRoutes);
 app.use("/viewed", viewedRoutes);
+app.use("/preferences", preferencesRoutes);
 
 // Test route
 app.get("/", (req, res) => {
