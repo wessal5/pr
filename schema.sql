@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS ingredients (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  quantity INT NOT NULL,
+  expiry_date DATE NOT NULL,
+  category VARCHAR(50)
+);

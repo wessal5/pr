@@ -5,9 +5,15 @@ require("dotenv").config();
 
 const app = express();
 
+// Routes
+const ingredientsRoutes = require("./routes/ingredients");
+
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// Use routes
+app.use("/ingredients", ingredientsRoutes);
 
 // Test route
 app.get("/", (req, res) => {
