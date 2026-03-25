@@ -1,4 +1,5 @@
 const pool = require("../config/db");
+const viewedController = require("./viewedController");
 
 const recipesController = {
   // Create recipe
@@ -25,6 +26,28 @@ const recipesController = {
     try {
       const [rows] = await pool.query("SELECT * FROM recipes");
       res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
+  // Get recipe by ID and log view
+  getRecipeById: async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const [rows] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
+
+      if (rows.length === 0) {
+        return res.status(404).json({ error: "Recipe not found" });
+      }
+
+      const recipe = rows[0];
+
+      // Auto-log view
+      await viewedController.logView(recipe.name);
+
+      res.json(recipe);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

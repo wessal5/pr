@@ -18,3 +18,14 @@ CREATE TABLE IF NOT EXISTS shopping_list (
   type ENUM('essential', 'optional') NOT NULL,
   checked BOOLEAN DEFAULT false
 );
+
+CREATE TABLE IF NOT EXISTS favorites (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  recipe_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS viewed_recipes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  recipe_name VARCHAR(100) NOT NULL,
+  viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
