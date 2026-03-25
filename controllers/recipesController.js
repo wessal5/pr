@@ -7,7 +7,7 @@ const recipesController = {
     const { name, ingredients } = req.body;
 
     if (!name || !ingredients || !Array.isArray(ingredients)) {
-      return res.status(400).json({ error: "Missing required fields or invalid ingredients format" });
+      return res.status(400).json({ success: false, error: "Missing required fields or invalid format" });
     }
 
     try {
@@ -15,9 +15,12 @@ const recipesController = {
         "INSERT INTO recipes (name, ingredients) VALUES (?, ?)",
         [name, JSON.stringify(ingredients)]
       );
-      res.status(201).json({ id: result.insertId, name, ingredients });
+      res.status(201).json({
+        success: true,
+        data: { id: result.insertId, name, ingredients }
+      });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -25,9 +28,9 @@ const recipesController = {
   getAllRecipes: async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT * FROM recipes");
-      res.json(rows);
+      res.status(200).json({ success: true, data: rows });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -39,17 +42,17 @@ const recipesController = {
       const [rows] = await pool.query("SELECT * FROM recipes WHERE id = ?", [id]);
 
       if (rows.length === 0) {
-        return res.status(404).json({ error: "Recipe not found" });
+        return res.status(404).json({ success: false, error: "Recipe not found" });
       }
 
       const recipe = rows[0];
 
-      // Auto-log view
+      // Auto-log view (silently)
       await viewedController.logView(recipe.name);
 
-      res.json(recipe);
+      res.status(200).json({ success: true, data: recipe });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -68,7 +71,7 @@ const recipesController = {
       const cannotMake = [];
 
       recipeRows.forEach((recipe) => {
-        const recipeIngredients = recipe.ingredients; // mysql2 automatically parses JSON columns
+        const recipeIngredients = recipe.ingredients;
         const missing = [];
 
         recipeIngredients.forEach((ing) => {
@@ -87,9 +90,12 @@ const recipesController = {
         }
       });
 
-      res.json({ canMake, cannotMake });
+      res.status(200).json({
+        success: true,
+        data: { canMake, cannotMake }
+      });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 };

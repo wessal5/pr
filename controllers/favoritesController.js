@@ -6,7 +6,7 @@ const favoritesController = {
     const { recipe_name } = req.body;
 
     if (!recipe_name) {
-      return res.status(400).json({ error: "Missing recipe_name" });
+      return res.status(400).json({ success: false, error: "Missing recipe_name" });
     }
 
     try {
@@ -17,7 +17,7 @@ const favoritesController = {
       );
 
       if (existing.length > 0) {
-        return res.status(400).json({ error: "Recipe already in favorites" });
+        return res.status(400).json({ success: false, error: "Recipe already in favorites" });
       }
 
       const [result] = await pool.query(
@@ -25,9 +25,12 @@ const favoritesController = {
         [recipe_name]
       );
 
-      res.status(201).json({ id: result.insertId, recipe_name });
+      res.status(201).json({
+        success: true,
+        data: { id: result.insertId, recipe_name }
+      });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -35,9 +38,9 @@ const favoritesController = {
   getFavorites: async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT * FROM favorites");
-      res.json(rows);
+      res.status(200).json({ success: true, data: rows });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -49,12 +52,12 @@ const favoritesController = {
       const [result] = await pool.query("DELETE FROM favorites WHERE id = ?", [id]);
 
       if (result.affectedRows === 0) {
-        return res.status(404).json({ error: "Favorite not found" });
+        return res.status(404).json({ success: false, error: "Favorite not found" });
       }
 
-      res.json({ message: "Recipe removed from favorites" });
+      res.status(200).json({ success: true, data: { message: "Recipe removed from favorites" } });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 };
