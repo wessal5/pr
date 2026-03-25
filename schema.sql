@@ -5,3 +5,9 @@ CREATE TABLE IF NOT EXISTS ingredients (
   expiry_date DATE NOT NULL,
   category VARCHAR(50)
 );
+
+CREATE TABLE IF NOT EXISTS recipes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  ingredients JSON NOT NULL
+);
