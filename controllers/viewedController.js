@@ -6,14 +6,14 @@ const viewedController = {
     const { recipe_name } = req.body;
 
     if (!recipe_name) {
-      return res.status(400).json({ error: "Missing recipe_name" });
+      return res.status(400).json({ success: false, error: "Missing recipe_name" });
     }
 
     try {
       await pool.query("INSERT INTO viewed_recipes (recipe_name) VALUES (?)", [recipe_name]);
-      res.status(201).json({ message: "View recorded" });
+      res.status(201).json({ success: true, data: { message: "View recorded" } });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -21,9 +21,9 @@ const viewedController = {
   getViewedHistory: async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT * FROM viewed_recipes ORDER BY viewed_at DESC");
-      res.json(rows);
+      res.status(200).json({ success: true, data: rows });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -31,9 +31,8 @@ const viewedController = {
   logView: async (recipe_name) => {
     try {
       await pool.query("INSERT INTO viewed_recipes (recipe_name) VALUES (?)", [recipe_name]);
-      console.log(`Auto-logged view for recipe: ${recipe_name}`);
     } catch (err) {
-      console.error(`Failed to auto-log view for recipe: ${recipe_name}`, err.message);
+      // Internal logging failure should not break the main request
     }
   },
 };

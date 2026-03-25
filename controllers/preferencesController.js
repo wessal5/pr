@@ -6,7 +6,7 @@ const preferencesController = {
     const { ingredient_name } = req.body;
 
     if (!ingredient_name) {
-      return res.status(400).json({ error: "Missing ingredient_name" });
+      return res.status(400).json({ success: false, error: "Missing ingredient_name" });
     }
 
     try {
@@ -17,7 +17,7 @@ const preferencesController = {
       );
 
       if (existing.length > 0) {
-        return res.status(400).json({ error: "Ingredient already in preferences" });
+        return res.status(400).json({ success: false, error: "Ingredient already in preferences" });
       }
 
       const [result] = await pool.query(
@@ -25,9 +25,12 @@ const preferencesController = {
         [ingredient_name]
       );
 
-      res.status(201).json({ id: result.insertId, ingredient_name });
+      res.status(201).json({
+        success: true,
+        data: { id: result.insertId, ingredient_name }
+      });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -35,9 +38,9 @@ const preferencesController = {
   getPreferences: async (req, res) => {
     try {
       const [rows] = await pool.query("SELECT * FROM preferences");
-      res.json(rows);
+      res.status(200).json({ success: true, data: rows });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -49,12 +52,12 @@ const preferencesController = {
       const [result] = await pool.query("DELETE FROM preferences WHERE id = ?", [id]);
 
       if (result.affectedRows === 0) {
-        return res.status(404).json({ error: "Preference not found" });
+        return res.status(404).json({ success: false, error: "Preference not found" });
       }
 
-      res.json({ message: "Preference deleted successfully" });
+      res.status(200).json({ success: true, data: { message: "Preference deleted successfully" } });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -62,7 +65,6 @@ const preferencesController = {
   checkStockLogic: async (req, res, next) => {
     try {
       // Rule 1: Identify preferred ingredients with quantity = 0
-      // We join preferences with ingredients to see which ones have quantity 0
       const [outOfStock] = await pool.query(`
         SELECT p.ingredient_name
         FROM preferences p
@@ -73,7 +75,7 @@ const preferencesController = {
       for (const item of outOfStock) {
         const name = item.ingredient_name;
 
-        // Rule 1: Automatically add to shopping_list as "essential", avoid duplicates
+        // Automatically add to shopping_list as "essential", avoid duplicates
         const [existing] = await pool.query(
           "SELECT id FROM shopping_list WHERE LOWER(name) = LOWER(?) AND type = 'essential'",
           [name]
@@ -84,13 +86,11 @@ const preferencesController = {
             "INSERT INTO shopping_list (name, type) VALUES (?, 'essential')",
             [name]
           );
-          console.log(`Auto-added ${name} to shopping list (essential)`);
         }
       }
 
       if (next) next();
     } catch (err) {
-      console.error("Stock monitoring error:", err.message);
       if (next) next();
     }
   },

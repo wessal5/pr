@@ -11,9 +11,9 @@ const shoppingListController = {
         optional: rows.filter((item) => item.type === "optional"),
       };
 
-      res.json(grouped);
+      res.status(200).json({ success: true, data: grouped });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -22,7 +22,7 @@ const shoppingListController = {
     const { name, type } = req.body;
 
     if (!name || !type || !["essential", "optional"].includes(type)) {
-      return res.status(400).json({ error: "Missing required fields or invalid type" });
+      return res.status(400).json({ success: false, error: "Missing required fields or invalid type" });
     }
 
     try {
@@ -33,7 +33,7 @@ const shoppingListController = {
       );
 
       if (existing.length > 0) {
-        return res.status(400).json({ error: "Item already exists in the shopping list for this type" });
+        return res.status(400).json({ success: false, error: "Item already exists in the shopping list for this type" });
       }
 
       const [result] = await pool.query(
@@ -41,9 +41,12 @@ const shoppingListController = {
         [name, type]
       );
 
-      res.status(201).json({ id: result.insertId, name, type, checked: false });
+      res.status(201).json({
+        success: true,
+        data: { id: result.insertId, name, type, checked: false }
+      });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -56,16 +59,19 @@ const shoppingListController = {
       const [rows] = await pool.query("SELECT checked FROM shopping_list WHERE id = ?", [id]);
 
       if (rows.length === 0) {
-        return res.status(404).json({ error: "Item not found" });
+        return res.status(404).json({ success: false, error: "Item not found" });
       }
 
       const newChecked = !rows[0].checked;
 
       await pool.query("UPDATE shopping_list SET checked = ? WHERE id = ?", [newChecked, id]);
 
-      res.json({ id, checked: newChecked });
+      res.status(200).json({
+        success: true,
+        data: { id, checked: newChecked }
+      });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 
@@ -77,12 +83,12 @@ const shoppingListController = {
       const [result] = await pool.query("DELETE FROM shopping_list WHERE id = ?", [id]);
 
       if (result.affectedRows === 0) {
-        return res.status(404).json({ error: "Item not found" });
+        return res.status(404).json({ success: false, error: "Item not found" });
       }
 
-      res.json({ message: "Item deleted successfully" });
+      res.status(200).json({ success: true, data: { message: "Item deleted successfully" } });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
     }
   },
 };

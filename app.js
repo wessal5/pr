@@ -29,7 +29,7 @@ app.use("/preferences", preferencesRoutes);
 
 // Test route
 app.get("/", (req, res) => {
-  res.json({ message: "Smart Home Ingredients API is running" });
+  res.json({ success: true, data: { message: "Smart Home Ingredients API is running" } });
 });
 
 const PORT = process.env.PORT || 3000;
