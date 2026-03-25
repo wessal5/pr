@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home Manager - Favorites</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h1>Favorites Module</h1>
+
+    <div class="card">
+      <h3>Add to Favorites</h3>
+      <form id="favorite-form">
+        <div class="grid" style="grid-template-columns: 2fr 1fr;">
+          <input type="text" id="recipe-name" class="form-control" required placeholder="Recipe Name (e.g. Pasta)">
+          <button type="submit" class="btn btn-primary">Add Favorite</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>My Favorite Recipes</h3>
+      <div id="favorites-list" class="grid"></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/favorites.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home Manager - Preferences</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h1>Preferences Module</h1>
+
+    <div class="card">
+      <h3>Add Essential Preference</h3>
+      <p>Items defined here will automatically be added to the shopping list if they go out of stock.</p>
+      <form id="preference-form">
+        <div class="grid" style="grid-template-columns: 2fr 1fr;">
+          <input type="text" id="pref-name" class="form-control" required placeholder="Ingredient Name (e.g. Milk)">
+          <button type="submit" class="btn btn-primary">Add Preference</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>My Essential Requirements</h3>
+      <div id="preferences-list" class="grid"></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/preferences.js"></script>
+</body>
+</html>

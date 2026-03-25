@@ -1,0 +1,139 @@
+:root {
+  --primary: #2563eb;
+  --secondary: #1e293b;
+  --background: #f8fafc;
+  --card-bg: #ffffff;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text: #0f172a;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  margin: 0;
+  padding-top: 70px; /* Fixed navbar height */
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--secondary);
+  color: white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  height: 60px;
+}
+
+.navbar .nav-links {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: var(--primary);
+}
+
+/* Common Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  color: var(--secondary);
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.3s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn-success {
+  background-color: var(--success);
+  color: white;
+}
+
+/* Grid for lists */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Status colors */
+.status-expired { color: var(--danger); font-weight: bold; }
+.status-critical { color: var(--warning); font-weight: bold; }
+.status-soon { color: #d97706; font-weight: bold; } /* Darker yellow */
+.status-normal { color: var(--success); font-weight: bold; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar .nav-links {
+    display: none; /* Mobile navigation would go here */
+  }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home Manager - Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h1>Welcome to Smart Home Manager</h1>
+    <p>Manage your ingredients, recipes, and shopping list easily.</p>
+
+    <div class="grid" id="stats-grid">
+      <div class="card">
+        <h3>Ingredients</h3>
+        <p id="ingredient-count">Loading...</p>
+        <a href="ingredients.html" class="btn btn-primary">Manage Ingredients</a>
+      </div>
+      <div class="card">
+        <h3>Recipes</h3>
+        <p id="recipe-count">Loading...</p>
+        <a href="recipes.html" class="btn btn-primary">Manage Recipes</a>
+      </div>
+      <div class="card">
+        <h3>Shopping List</h3>
+        <p id="shopping-count">Loading...</p>
+        <a href="shopping-list.html" class="btn btn-primary">View List</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      ui.renderNavbar("dashboard");
+
+      try {
+        const ingredients = await api.getIngredients();
+        document.getElementById("ingredient-count").innerText = `${ingredients.data.length} Items in stock`;
+
+        const recipes = await api.getRecipes();
+        document.getElementById("recipe-count").innerText = `${recipes.data.length} Recipes saved`;
+
+        const shoppingList = await api.getShoppingList();
+        const count = shoppingList.data.essential.length + shoppingList.data.optional.length;
+        document.getElementById("shopping-count").innerText = `${count} Items to buy`;
+      } catch (err) {
+        console.error("Dashboard stats error:", err);
+      }
+    });
+  </script>
+</body>
+</html>

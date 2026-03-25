@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home Manager - Recipes</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h1>Recipes Module</h1>
+
+    <div class="grid">
+      <!-- Add Recipe Form -->
+      <div class="card">
+        <h3>Create New Recipe</h3>
+        <form id="recipe-form">
+          <div class="form-group">
+            <label for="recipe-name">Recipe Name</label>
+            <input type="text" id="recipe-name" class="form-control" required placeholder="Pancakes">
+          </div>
+          <div class="form-group">
+            <label for="recipe-ingredients">Ingredients (Comma separated)</label>
+            <input type="text" id="recipe-ingredients" class="form-control" required placeholder="Flour, Milk, Eggs">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Recipe</button>
+        </form>
+      </div>
+
+      <!-- Suggestion Button -->
+      <div class="card">
+        <h3>Cooking Suggestions</h3>
+        <p>Find out what you can cook with your current ingredients.</p>
+        <button id="btn-suggestions" class="btn btn-success">Get Smart Suggestions</button>
+      </div>
+    </div>
+
+    <!-- Suggestion Results -->
+    <div id="suggestions-result" style="display:none; margin-top: 20px;">
+      <div class="grid">
+        <div class="card">
+          <h3 style="color: var(--success);">✔ Can Make</h3>
+          <ul id="can-make-list"></ul>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--danger);">✘ Cannot Make</h3>
+          <div id="cannot-make-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipes List -->
+    <div class="card" style="margin-top: 20px;">
+      <h3>All Recipes</h3>
+      <div id="recipes-list" class="grid"></div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/recipes.js"></script>
+</body>
+</html>
