@@ -11,3 +11,10 @@ CREATE TABLE IF NOT EXISTS recipes (
   name VARCHAR(100) NOT NULL,
   ingredients JSON NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS shopping_list (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  type ENUM('essential', 'optional') NOT NULL,
+  checked BOOLEAN DEFAULT false
+);
