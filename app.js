@@ -9,6 +9,8 @@ const app = express();
 const ingredientsRoutes = require("./routes/ingredients");
 const recipesRoutes = require("./routes/recipes");
 const shoppingListRoutes = require("./routes/shoppingList");
+const favoritesRoutes = require("./routes/favorites");
+const viewedRoutes = require("./routes/viewed");
 
 // Middlewares
 app.use(cors());
@@ -18,6 +20,8 @@ app.use(express.json());
 app.use("/ingredients", ingredientsRoutes);
 app.use("/recipes", recipesRoutes);
 app.use("/shopping-list", shoppingListRoutes);
+app.use("/favorites", favoritesRoutes);
+app.use("/viewed", viewedRoutes);
 
 // Test route
 app.get("/", (req, res) => {
